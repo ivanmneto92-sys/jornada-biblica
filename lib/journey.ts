@@ -12,6 +12,10 @@ export type Period = {
   /** mensagem exibida ao concluir o último dia do período */
   completionTitle: string
   completionBody: string[]
+  /** imagem de fundo usada no card principal do período */
+  image: string
+  /** frase curta usada como convite na tela inicial */
+  invitation: string
 }
 
 export const TOTAL_DAYS = 73
@@ -34,6 +38,8 @@ export const PERIODS: Period[] = [
       'Durante os últimos 24 dias, você acompanhou a vida, os ensinamentos, a morte e a ressurreição de Jesus.',
       'Amanhã, você começará o livro de Atos e acompanhará o que aconteceu depois da ressurreição de Jesus.',
     ],
+    image: '/images/period-1.png',
+    invitation: 'Acompanhe a vida de Jesus, do começo ao fim.',
   },
   {
     index: 2,
@@ -52,6 +58,8 @@ export const PERIODS: Period[] = [
       'Agora você conhece parte da história dos primeiros discípulos, do começo da Igreja e da expansão da mensagem de Jesus.',
       'Amanhã, você iniciará o Evangelho de João para aprofundar seu conhecimento sobre Jesus.',
     ],
+    image: '/images/period-2.png',
+    invitation: 'Veja a mensagem de Jesus chegando a novos lugares.',
   },
   {
     index: 3,
@@ -71,6 +79,8 @@ export const PERIODS: Period[] = [
       'Você conheceu a vida e os ensinamentos de Jesus, acompanhou o início da Igreja e aprofundou sua leitura sobre quem Jesus é.',
       'Este não é o fim da sua jornada. Agora você poderá escolher o próximo caminho e continuar conhecendo toda a Bíblia.',
     ],
+    image: '/images/period-3.png',
+    invitation: 'Aprofunde o que você já conhece sobre Jesus.',
   },
 ]
 

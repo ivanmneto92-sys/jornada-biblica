@@ -45,6 +45,15 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-lora), ui-serif, Georgia, serif;
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
+}
+
+/* sobreposição de imagens: mantém contraste igual nos dois temas */
+:root,
+.dark {
+  --overlay: oklch(0.2 0.014 60);
+  --overlay-foreground: oklch(0.97 0.009 85);
 }
 
 :root {

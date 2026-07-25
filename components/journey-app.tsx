@@ -1,19 +1,30 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Flame, Sparkles } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Flame } from 'lucide-react'
+import { BottomNav } from '@/components/bottom-nav'
 import { JourneyOverview } from '@/components/journey-overview'
 import { RecordsView } from '@/components/records-view'
 import { TodayView } from '@/components/today-view'
 import { TOTAL_DAYS, getReading } from '@/lib/journey'
 import { useJourney } from '@/lib/use-journey'
 
+function getGreeting() {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Bom dia'
+  if (hour < 18) return 'Boa tarde'
+  return 'Boa noite'
+}
+
 export function JourneyApp() {
   const journey = useJourney()
   const [tab, setTab] = useState('hoje')
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
+  const [greeting, setGreeting] = useState('Olá')
+
+  useEffect(() => {
+    setGreeting(getGreeting())
+  }, [])
 
   // enquanto o usuário não navegar manualmente, acompanhamos o dia atual da jornada
   useEffect(() => {
@@ -42,53 +53,50 @@ export function JourneyApp() {
     }
   }
 
+  const changeTab = (value: string) => {
+    setTab(value)
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 sm:py-10">
-      <header className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="size-4 text-accent" aria-hidden="true" />
-            <p className="text-sm font-medium tracking-wide text-muted-foreground uppercase">
-              Caminho 1 · Começar entendendo
-            </p>
+    <div className="min-h-svh pb-28 sm:pb-32">
+      <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 pt-6 sm:px-6 sm:pt-10">
+        <header className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="font-serif text-2xl leading-tight sm:text-3xl">{greeting}</h1>
+            {journey.streak > 0 && (
+              <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground">
+                <Flame className="size-4 text-accent" aria-hidden="true" />
+                {journey.streak}
+                <span className="text-muted-foreground">
+                  {journey.streak === 1 ? 'dia' : 'dias'}
+                </span>
+              </span>
+            )}
           </div>
-          {journey.streak > 0 && (
-            <Badge variant="outline" className="h-6 gap-1">
-              <Flame className="text-accent" aria-hidden="true" />
-              {journey.streak} {journey.streak === 1 ? 'dia seguido' : 'dias seguidos'}
-            </Badge>
-          )}
-        </div>
-        <h1 className="font-serif text-2xl leading-tight text-balance sm:text-3xl">
-          Uma jornada de 73 dias por Lucas, Atos e João
-        </h1>
-        <p className="max-w-prose text-sm leading-relaxed text-pretty text-muted-foreground">
-          Um capítulo por dia, sem precisar decidir o que ler. Comece conhecendo Jesus, acompanhe o
-          início da Igreja e aprofunde sua leitura.
-        </p>
-      </header>
+          <p className="text-sm text-muted-foreground">
+            Caminho 1 · Começar entendendo · Lucas, Atos e João em {TOTAL_DAYS} dias
+          </p>
+        </header>
 
-      <Tabs value={tab} onValueChange={(value) => setTab(value as string)} className="gap-6">
-        <TabsList className="w-full">
-          <TabsTrigger value="hoje">Hoje</TabsTrigger>
-          <TabsTrigger value="jornada">Jornada</TabsTrigger>
-          <TabsTrigger value="registros">Registros</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="hoje">
+        {tab === 'hoje' && (
           <TodayView
             reading={reading}
             record={record}
             periodCompletedCount={periodCompletedCount}
             totalCompletedCount={journey.completedDays.length}
+            streak={journey.streak}
+            savedVersesCount={journey.savedVerses.length}
             onSelectDay={selectDay}
             onToggleCheck={(itemId) => journey.toggleCheck(day, itemId)}
             onUpdate={(patch) => journey.updateDay(day, patch)}
             onSetCompleted={(completed) => journey.setCompleted(day, completed)}
           />
-        </TabsContent>
+        )}
 
-        <TabsContent value="jornada">
+        {tab === 'jornada' && (
           <JourneyOverview
             currentDay={journey.currentDay}
             selectedDay={day}
@@ -97,9 +105,9 @@ export function JourneyApp() {
             savedVersesCount={journey.savedVerses.length}
             onSelectDay={selectDay}
           />
-        </TabsContent>
+        )}
 
-        <TabsContent value="registros">
+        {tab === 'registros' && (
           <RecordsView
             savedVerses={journey.savedVerses}
             notes={journey.notes}
@@ -110,8 +118,10 @@ export function JourneyApp() {
               setTab('hoje')
             }}
           />
-        </TabsContent>
-      </Tabs>
-    </main>
+        )}
+      </main>
+
+      <BottomNav value={tab} onChange={changeTab} />
+    </div>
   )
 }
