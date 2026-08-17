@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Flame } from 'lucide-react'
+import Link from 'next/link'
+import { Flame, User } from 'lucide-react'
 import { BottomNav } from '@/components/bottom-nav'
 import { JourneyOverview } from '@/components/journey-overview'
 import { RecordsView } from '@/components/records-view'
@@ -16,7 +17,7 @@ function getGreeting() {
   return 'Boa noite'
 }
 
-export function JourneyApp() {
+export function JourneyApp({ userFirstName }: { userFirstName?: string }) {
   const journey = useJourney()
   const [tab, setTab] = useState('hoje')
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
@@ -65,16 +66,28 @@ export function JourneyApp() {
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 pt-6 sm:px-6 sm:pt-10">
         <header className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h1 className="font-serif text-2xl leading-tight sm:text-3xl">{greeting}</h1>
-            {journey.streak > 0 && (
-              <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground">
-                <Flame className="size-4 text-accent" aria-hidden="true" />
-                {journey.streak}
-                <span className="text-muted-foreground">
-                  {journey.streak === 1 ? 'dia' : 'dias'}
+            <h1 className="font-serif text-2xl leading-tight sm:text-3xl">
+              {greeting}
+              {userFirstName ? `, ${userFirstName}` : ''}
+            </h1>
+            <div className="flex items-center gap-2">
+              {journey.streak > 0 && (
+                <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground">
+                  <Flame className="size-4 text-accent" aria-hidden="true" />
+                  {journey.streak}
+                  <span className="text-muted-foreground">
+                    {journey.streak === 1 ? 'dia' : 'dias'}
+                  </span>
                 </span>
-              </span>
-            )}
+              )}
+              <Link
+                href="/perfil"
+                aria-label="Seu perfil"
+                className="flex size-9 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/70"
+              >
+                <User className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
           <p className="text-sm text-muted-foreground">
             Caminho 1 · Começar entendendo · Lucas, Atos e João em {TOTAL_DAYS} dias
