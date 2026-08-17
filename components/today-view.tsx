@@ -24,6 +24,8 @@ import {
   getReading,
   type Reading,
 } from '@/lib/journey'
+import { periodColor } from '@/lib/period-colors'
+import { cn } from '@/lib/utils'
 import type { DayRecord } from '@/lib/use-journey'
 
 type TodayViewProps = {
@@ -52,6 +54,7 @@ export function TodayView({
   onSetCompleted,
 }: TodayViewProps) {
   const { day, period } = reading
+  const color = periodColor(period.index)
   const checkedCount = Object.values(record.checks).filter(Boolean).length
   const isLastDayOfPeriod = day === period.endDay
   const isLastDay = day === TOTAL_DAYS
@@ -81,8 +84,8 @@ export function TodayView({
         <h3 className="font-serif text-xl">Seu progresso</h3>
         <Card>
           <CardContent className="flex flex-col gap-5">
-            <div className="flex items-start gap-2 rounded-xl bg-secondary p-4 text-sm leading-relaxed text-secondary-foreground">
-              <Target className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+            <div className={cn('flex items-start gap-2 rounded-xl p-4 text-sm leading-relaxed text-secondary-foreground', color.bg)}>
+              <Target className={cn('mt-0.5 size-4 shrink-0', color.text)} aria-hidden="true" />
               <p className="text-pretty">
                 <span className="font-medium">Objetivo deste período: </span>
                 {period.objective}
@@ -95,7 +98,7 @@ export function TodayView({
                 className="gap-2"
               >
                 <div className="flex w-full items-center justify-between text-sm">
-                  <span className="font-medium">Período {period.index}</span>
+                  <span className={cn('font-medium', color.text)}>Período {period.index}</span>
                   <span className="tabular-nums text-muted-foreground">
                     {periodCompletedCount} de {period.chapters} capítulos
                   </span>

@@ -47,6 +47,9 @@
   --font-serif: var(--font-lora), ui-serif, Georgia, serif;
   --color-overlay: var(--overlay);
   --color-overlay-foreground: var(--overlay-foreground);
+  --color-period-1: var(--period-1);
+  --color-period-2: var(--period-2);
+  --color-period-3: var(--period-3);
 }
 
 /* sobreposição de imagens: mantém contraste igual nos dois temas */
@@ -54,6 +57,14 @@
 .dark {
   --overlay: oklch(0.2 0.014 60);
   --overlay-foreground: oklch(0.97 0.009 85);
+}
+
+/* identidade visual por período: mesmo tom em ambos os temas para reconhecimento consistente */
+:root,
+.dark {
+  --period-1: oklch(0.45 0.062 165); /* Lucas · verde, mesmo tom do primary */
+  --period-2: oklch(0.62 0.13 55); /* Atos · âmbar terroso */
+  --period-3: oklch(0.5 0.1 25); /* João · terracota */
 }
 
 :root {

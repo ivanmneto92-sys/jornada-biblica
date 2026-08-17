@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { PERIODS, TOTAL_DAYS, getReading } from '@/lib/journey'
+import { periodColor } from '@/lib/period-colors'
 import { cn } from '@/lib/utils'
 
 type JourneyOverviewProps = {
@@ -60,12 +61,13 @@ export function JourneyOverview({
           (_, index) => period.startDay + index,
         )
         const done = days.filter((day) => completedSet.has(day)).length
+        const color = periodColor(period.index)
 
         return (
           <Card key={period.index}>
             <CardHeader className="gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="h-6">
+                <Badge className={cn('h-6 border-transparent', color.bg, color.text)}>
                   Período {period.index}
                 </Badge>
                 <CardTitle className="font-serif text-xl">{period.title}</CardTitle>
@@ -106,14 +108,14 @@ export function JourneyOverview({
                           'flex w-full flex-col items-center gap-0.5 rounded-lg border px-2 py-2 text-center transition-colors',
                           'hover:border-primary/60 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
                           isDone
-                            ? 'border-primary/30 bg-primary/10 text-foreground'
+                            ? cn(color.border, color.bg, 'text-foreground')
                             : 'border-border bg-card text-muted-foreground',
-                          isCurrent && !isDone && 'border-accent bg-accent/15 text-foreground',
-                          isSelected && 'ring-2 ring-primary/50',
+                          isCurrent && !isDone && cn(color.border, color.bg, 'text-foreground'),
+                          isSelected && cn('ring-2', color.ring),
                         )}
                       >
                         <span className="flex items-center gap-1 text-xs font-medium tabular-nums">
-                          {isDone && <Check className="size-3 text-primary" aria-hidden="true" />}
+                          {isDone && <Check className={cn('size-3', color.text)} aria-hidden="true" />}
                           Dia {day}
                         </span>
                         <span className="font-serif text-sm text-foreground">
