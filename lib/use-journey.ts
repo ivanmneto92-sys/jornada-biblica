@@ -70,6 +70,7 @@ export function useJourney() {
   const [userId, setUserId] = useState<string | null>(null)
   const [state, setState] = useState<JourneyState>({ days: {} })
   const [loaded, setLoaded] = useState(false)
+  const [loadError, setLoadError] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -91,6 +92,8 @@ export function useJourney() {
 
       if (!error && data) {
         setState(rowsToState(data as DayRow[]))
+      } else {
+        setLoadError(true)
       }
       setLoaded(true)
     }
@@ -232,6 +235,7 @@ export function useJourney() {
 
   return {
     loaded,
+    loadError,
     state,
     getDay,
     updateDay,

@@ -80,7 +80,19 @@ export default function SignUpPage() {
                 </Button>
               </form>
 
-              <p className="mt-5 text-center text-sm text-muted-foreground">
+              <p className="mt-4 text-center text-xs text-muted-foreground">
+                Ao criar uma conta, você concorda com os{' '}
+                <Link href="/termos-de-uso" className="underline underline-offset-4">
+                  Termos de Uso
+                </Link>{' '}
+                e a{' '}
+                <Link href="/politica-de-privacidade" className="underline underline-offset-4">
+                  Política de Privacidade
+                </Link>
+                .
+              </p>
+
+              <p className="mt-3 text-center text-sm text-muted-foreground">
                 Já tem conta?{' '}
                 <Link href="/entrar" className="text-foreground underline underline-offset-4">
                   Entrar

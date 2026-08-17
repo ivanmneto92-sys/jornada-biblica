@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { Flame, User } from 'lucide-react'
+import { Flame, TriangleAlert, User } from 'lucide-react'
 import { BibleView } from '@/components/bible-view'
 import { BottomNav } from '@/components/bottom-nav'
 import { JourneyOverview } from '@/components/journey-overview'
+import { JourneySkeleton } from '@/components/journey-skeleton'
 import { RecordsView } from '@/components/records-view'
 import { TodayView } from '@/components/today-view'
 import { TOTAL_DAYS, getReading } from '@/lib/journey'
@@ -95,46 +96,69 @@ export function JourneyApp({ userFirstName }: { userFirstName?: string }) {
           </p>
         </header>
 
-        {tab === 'hoje' && (
-          <TodayView
-            reading={reading}
-            record={record}
-            periodCompletedCount={periodCompletedCount}
-            totalCompletedCount={journey.completedDays.length}
-            streak={journey.streak}
-            savedVersesCount={journey.savedVerses.length}
-            onSelectDay={selectDay}
-            onToggleCheck={(itemId) => journey.toggleCheck(day, itemId)}
-            onUpdate={(patch) => journey.updateDay(day, patch)}
-            onSetCompleted={(completed) => journey.setCompleted(day, completed)}
-          />
+        {journey.loadError && (
+          <div className="flex items-start gap-2 rounded-xl bg-destructive/10 p-4 text-sm text-destructive">
+            <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            <div className="flex flex-col gap-1">
+              <p>Não conseguimos carregar seu progresso agora.</p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="w-fit underline underline-offset-4"
+              >
+                Tentar novamente
+              </button>
+            </div>
+          </div>
         )}
 
-        {tab === 'biblia' && <BibleView />}
+        {!journey.loaded && (tab === 'hoje' || tab === 'jornada' || tab === 'registros') ? (
+          <JourneySkeleton />
+        ) : (
+          <>
+            {tab === 'hoje' && (
+              <TodayView
+                reading={reading}
+                record={record}
+                periodCompletedCount={periodCompletedCount}
+                totalCompletedCount={journey.completedDays.length}
+                streak={journey.streak}
+                savedVersesCount={journey.savedVerses.length}
+                onSelectDay={selectDay}
+                onToggleCheck={(itemId) => journey.toggleCheck(day, itemId)}
+                onUpdate={(patch) => journey.updateDay(day, patch)}
+                onSetCompleted={(completed) => journey.setCompleted(day, completed)}
+              />
+            )}
 
-        {tab === 'jornada' && (
-          <JourneyOverview
-            currentDay={journey.currentDay}
-            selectedDay={day}
-            completedDays={journey.completedDays}
-            streak={journey.streak}
-            savedVersesCount={journey.savedVerses.length}
-            notesCount={journey.notes.length}
-            onSelectDay={selectDay}
-          />
-        )}
+            {tab === 'biblia' && <BibleView />}
 
-        {tab === 'registros' && (
-          <RecordsView
-            savedVerses={journey.savedVerses}
-            notes={journey.notes}
-            onSelectDay={selectDay}
-            onReset={() => {
-              journey.reset()
-              setSelectedDay(1)
-              setTab('hoje')
-            }}
-          />
+            {tab === 'jornada' && (
+              <JourneyOverview
+                currentDay={journey.currentDay}
+                selectedDay={day}
+                completedDays={journey.completedDays}
+                streak={journey.streak}
+                savedVersesCount={journey.savedVerses.length}
+                notesCount={journey.notes.length}
+                onSelectDay={selectDay}
+              />
+            )}
+
+            {tab === 'registros' && (
+              <RecordsView
+                savedVerses={journey.savedVerses}
+                notes={journey.notes}
+                completedDays={journey.completedDays}
+                onSelectDay={selectDay}
+                onReset={() => {
+                  journey.reset()
+                  setSelectedDay(1)
+                  setTab('hoje')
+                }}
+              />
+            )}
+          </>
         )}
       </main>
 

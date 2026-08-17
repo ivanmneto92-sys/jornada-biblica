@@ -1,11 +1,15 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ChevronLeft, ChevronRight, LogOut, Settings, User } from 'lucide-react'
+import { ChevronLeft, ChevronRight, LogOut, Settings } from 'lucide-react'
+import { AvatarInitials } from '@/components/avatar-initials'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from './actions'
+import { ChangePasswordForm } from './change-password-form'
+import { DeleteAccountButton } from './delete-account-button'
+import { EditNameForm } from './edit-name-form'
 import { ResetJourneyButton } from './reset-button'
 
 export default async function ProfilePage() {
@@ -36,23 +40,20 @@ export default async function ProfilePage() {
 
       <Card>
         <CardHeader className="flex-row items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-full bg-secondary">
-            <User className="size-5 text-secondary-foreground" aria-hidden="true" />
-          </span>
-          <div className="flex flex-col">
-            <CardTitle className="font-serif text-xl">
-              {profile?.full_name || 'Sua conta'}
-            </CardTitle>
+          <AvatarInitials name={profile?.full_name || user.email || ''} />
+          <div className="flex flex-col gap-0.5">
+            <EditNameForm name={profile?.full_name ?? ''} />
             <p className="text-sm text-muted-foreground">{user.email}</p>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-wrap gap-2">
           <form action={signOut}>
             <Button type="submit" variant="outline">
               <LogOut className="size-4" />
               Sair da conta
             </Button>
           </form>
+          <ChangePasswordForm />
         </CardContent>
       </Card>
 
@@ -86,6 +87,29 @@ export default async function ProfilePage() {
           </div>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-serif text-xl text-destructive">Zona de risco</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Exclui sua conta e todos os seus dados permanentemente. Diferente de recomeçar a
+            jornada, isso remove seu login também.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <DeleteAccountButton />
+        </CardContent>
+      </Card>
+
+      <p className="text-center text-xs text-muted-foreground">
+        <Link href="/politica-de-privacidade" className="underline underline-offset-4">
+          Política de Privacidade
+        </Link>
+        {' · '}
+        <Link href="/termos-de-uso" className="underline underline-offset-4">
+          Termos de Uso
+        </Link>
+      </p>
     </div>
   )
 }

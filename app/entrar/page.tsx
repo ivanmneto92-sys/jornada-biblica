@@ -33,9 +33,17 @@ export default function LoginPage() {
               <Input id="email" name="email" type="email" autoComplete="email" required />
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Senha
-              </label>
+              <div className="flex items-center justify-between gap-2">
+                <label htmlFor="password" className="text-sm font-medium">
+                  Senha
+                </label>
+                <Link
+                  href="/recuperar-senha"
+                  className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                >
+                  Esqueceu a senha?
+                </Link>
+              </div>
               <Input
                 id="password"
                 name="password"
