@@ -83,7 +83,7 @@ export function JourneyApp({ userFirstName }: { userFirstName?: string }) {
               <Link
                 href="/perfil"
                 aria-label="Seu perfil"
-                className="flex size-9 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/70"
+                className="flex size-11 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/70"
               >
                 <User className="size-4" aria-hidden="true" />
               </Link>
@@ -116,6 +116,7 @@ export function JourneyApp({ userFirstName }: { userFirstName?: string }) {
             completedDays={journey.completedDays}
             streak={journey.streak}
             savedVersesCount={journey.savedVerses.length}
+            notesCount={journey.notes.length}
             onSelectDay={selectDay}
           />
         )}

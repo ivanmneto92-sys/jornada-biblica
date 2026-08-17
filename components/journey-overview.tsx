@@ -4,6 +4,7 @@ import { Check, Flame, CalendarCheck, BookMarked } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { BadgesGrid } from '@/components/badges-grid'
 import { PERIODS, TOTAL_DAYS, getReading } from '@/lib/journey'
 import { periodColor } from '@/lib/period-colors'
 import { cn } from '@/lib/utils'
@@ -14,6 +15,7 @@ type JourneyOverviewProps = {
   completedDays: number[]
   streak: number
   savedVersesCount: number
+  notesCount: number
   onSelectDay: (day: number) => void
 }
 
@@ -23,6 +25,7 @@ export function JourneyOverview({
   completedDays,
   streak,
   savedVersesCount,
+  notesCount,
   onSelectDay,
 }: JourneyOverviewProps) {
   const completedSet = new Set(completedDays)
@@ -54,6 +57,8 @@ export function JourneyOverview({
           </Card>
         ))}
       </div>
+
+      <BadgesGrid stats={{ completedDays, streak, savedVersesCount, notesCount }} />
 
       {PERIODS.map((period) => {
         const days = Array.from(

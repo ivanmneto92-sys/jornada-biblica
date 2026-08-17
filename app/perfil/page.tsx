@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ChevronLeft, LogOut, User } from 'lucide-react'
+import { ChevronLeft, ChevronRight, LogOut, Settings, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -54,6 +54,19 @@ export default async function ProfilePage() {
             </Button>
           </form>
         </CardContent>
+      </Card>
+
+      <Card className="overflow-hidden py-0">
+        <Link
+          href="/configuracoes"
+          className="flex items-center gap-3 p-5 transition-colors hover:bg-secondary/60"
+        >
+          <span className="flex size-9 items-center justify-center rounded-full bg-secondary">
+            <Settings className="size-4 text-secondary-foreground" aria-hidden="true" />
+          </span>
+          <span className="flex-1 font-medium">Configurações</span>
+          <ChevronRight className="size-4 text-muted-foreground" aria-hidden="true" />
+        </Link>
       </Card>
 
       <Card>

@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import useSWR from 'swr'
 import { BookOpen, Loader2, Minus, Plus, TriangleAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { Reading } from '@/lib/journey'
+import { useReadingPreferences } from '@/lib/use-reading-preferences'
 
 type ChapterResponse = {
   reference: string
@@ -20,7 +20,7 @@ const fetcher = async (url: string): Promise<ChapterResponse> => {
 }
 
 export function ChapterReader({ reading }: { reading: Reading }) {
-  const [fontStep, setFontStep] = useState(1)
+  const { fontStep, setFontStep } = useReadingPreferences()
   const { data, error, isLoading } = useSWR<ChapterResponse>(
     `/api/chapter?book=${reading.period.bookSlug}&chapter=${reading.chapter}`,
     fetcher,
@@ -40,8 +40,7 @@ export function ChapterReader({ reading }: { reading: Reading }) {
           <Button
             variant="ghost"
             size="icon"
-            className="size-8"
-            onClick={() => setFontStep((step) => Math.max(0, step - 1))}
+            onClick={() => setFontStep(fontStep - 1)}
             disabled={fontStep === 0}
             aria-label="Diminuir tamanho do texto"
           >
@@ -53,8 +52,7 @@ export function ChapterReader({ reading }: { reading: Reading }) {
           <Button
             variant="ghost"
             size="icon"
-            className="size-8"
-            onClick={() => setFontStep((step) => Math.min(2, step + 1))}
+            onClick={() => setFontStep(fontStep + 1)}
             disabled={fontStep === 2}
             aria-label="Aumentar tamanho do texto"
           >

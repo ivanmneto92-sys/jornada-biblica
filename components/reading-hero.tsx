@@ -49,7 +49,7 @@ export function ReadingHero({
             <Button
               variant="ghost"
               size="icon"
-              className="size-9 rounded-full bg-overlay-foreground/15 text-overlay-foreground hover:bg-overlay-foreground/25 hover:text-overlay-foreground"
+              className="size-11 rounded-full bg-overlay-foreground/15 text-overlay-foreground hover:bg-overlay-foreground/25 hover:text-overlay-foreground"
               onClick={() => onSelectDay(day - 1)}
               disabled={day <= 1}
               aria-label="Dia anterior"
@@ -59,7 +59,7 @@ export function ReadingHero({
             <Button
               variant="ghost"
               size="icon"
-              className="size-9 rounded-full bg-overlay-foreground/15 text-overlay-foreground hover:bg-overlay-foreground/25 hover:text-overlay-foreground"
+              className="size-11 rounded-full bg-overlay-foreground/15 text-overlay-foreground hover:bg-overlay-foreground/25 hover:text-overlay-foreground"
               onClick={() => onSelectDay(day + 1)}
               disabled={day >= TOTAL_DAYS}
               aria-label="Próximo dia"
