@@ -18,7 +18,7 @@ export default async function Page() {
     .eq('id', user.id)
     .single()
 
-  const firstName = (profile?.full_name || user.email || '').split(' ')[0]
+  const firstName = profile?.full_name?.trim().split(' ')[0]
 
   return <JourneyApp userFirstName={firstName} />
 }

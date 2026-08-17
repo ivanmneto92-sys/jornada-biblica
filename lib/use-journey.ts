@@ -93,6 +93,7 @@ export function useJourney() {
       if (!error && data) {
         setState(rowsToState(data as DayRow[]))
       } else {
+        console.error('Falha ao carregar progresso da jornada:', error)
         setLoadError(true)
       }
       setLoaded(true)
