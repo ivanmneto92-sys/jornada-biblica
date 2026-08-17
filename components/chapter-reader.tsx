@@ -4,7 +4,6 @@ import useSWR from 'swr'
 import { BookOpen, Loader2, Minus, Plus, TriangleAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { Reading } from '@/lib/journey'
 import { useReadingPreferences } from '@/lib/use-reading-preferences'
 
 type ChapterResponse = {
@@ -19,10 +18,16 @@ const fetcher = async (url: string): Promise<ChapterResponse> => {
   return response.json()
 }
 
-export function ChapterReader({ reading }: { reading: Reading }) {
+type ChapterReaderProps = {
+  bookSlug: string
+  chapter: number
+  reference: string
+}
+
+export function ChapterReader({ bookSlug, chapter, reference }: ChapterReaderProps) {
   const { fontStep, setFontStep } = useReadingPreferences()
   const { data, error, isLoading } = useSWR<ChapterResponse>(
-    `/api/chapter?book=${reading.period.bookSlug}&chapter=${reading.chapter}`,
+    `/api/chapter?book=${encodeURIComponent(bookSlug)}&chapter=${chapter}`,
     fetcher,
     { revalidateOnFocus: false, keepPreviousData: false },
   )
@@ -34,7 +39,7 @@ export function ChapterReader({ reading }: { reading: Reading }) {
       <CardHeader className="flex-row items-center justify-between gap-3 border-b">
         <div className="flex items-center gap-2">
           <BookOpen className="size-4 text-primary" aria-hidden="true" />
-          <CardTitle className="font-serif text-base">{reading.reference}</CardTitle>
+          <CardTitle className="font-serif text-base">{reference}</CardTitle>
         </div>
         <div className="flex items-center gap-1">
           <Button
@@ -64,7 +69,7 @@ export function ChapterReader({ reading }: { reading: Reading }) {
         {isLoading && (
           <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-            Carregando {reading.reference}...
+            Carregando {reference}...
           </div>
         )}
 
@@ -73,7 +78,7 @@ export function ChapterReader({ reading }: { reading: Reading }) {
             <TriangleAlert className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
             <p>
               Não conseguimos carregar o texto agora. Você pode ler{' '}
-              <strong className="text-foreground">{reading.reference}</strong> na sua Bíblia e
+              <strong className="text-foreground">{reference}</strong> na sua Bíblia e
               continuar a jornada normalmente.
             </p>
           </div>

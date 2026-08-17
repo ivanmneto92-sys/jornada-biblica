@@ -1,23 +1,24 @@
 import { NextResponse } from 'next/server'
-import { PERIODS } from '@/lib/journey'
+import { BIBLE_BOOKS_BY_SLUG } from '@/lib/bible-books'
 
 type ApiVerse = { verse: number; text: string }
 type ApiResponse = { reference?: string; verses?: ApiVerse[]; error?: string }
-
-const allowedSlugs = new Set(PERIODS.map((p) => p.bookSlug))
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const book = searchParams.get('book') ?? ''
   const chapter = Number(searchParams.get('chapter'))
 
-  if (!allowedSlugs.has(book) || !Number.isInteger(chapter) || chapter < 1 || chapter > 28) {
+  const bookInfo = BIBLE_BOOKS_BY_SLUG.get(book)
+
+  if (!bookInfo || !Number.isInteger(chapter) || chapter < 1 || chapter > bookInfo.chapters) {
     return NextResponse.json({ error: 'Leitura inválida.' }, { status: 400 })
   }
 
   try {
+    const bookPath = book.replace(/\s+/g, '+')
     const response = await fetch(
-      `https://bible-api.com/${book}+${chapter}?translation=almeida`,
+      `https://bible-api.com/${bookPath}+${chapter}?translation=almeida`,
       { next: { revalidate: 60 * 60 * 24 * 30 } },
     )
 

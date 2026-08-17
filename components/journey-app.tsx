@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Flame, User } from 'lucide-react'
+import { BibleView } from '@/components/bible-view'
 import { BottomNav } from '@/components/bottom-nav'
 import { JourneyOverview } from '@/components/journey-overview'
 import { RecordsView } from '@/components/records-view'
@@ -108,6 +109,8 @@ export function JourneyApp({ userFirstName }: { userFirstName?: string }) {
             onSetCompleted={(completed) => journey.setCompleted(day, completed)}
           />
         )}
+
+        {tab === 'biblia' && <BibleView />}
 
         {tab === 'jornada' && (
           <JourneyOverview

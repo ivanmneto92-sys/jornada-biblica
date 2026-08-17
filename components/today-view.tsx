@@ -133,7 +133,11 @@ export function TodayView({
         <h3 className="font-serif text-xl">
           {period.bookName} {reading.chapter}
         </h3>
-        <ChapterReader reading={reading} />
+        <ChapterReader
+          bookSlug={reading.period.bookSlug}
+          chapter={reading.chapter}
+          reference={reading.reference}
+        />
       </section>
 
       <section className="flex flex-col gap-3">

@@ -1,10 +1,11 @@
 'use client'
 
-import { BookMarked, Home, Map } from 'lucide-react'
+import { Book, BookMarked, Home, Map } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const ITEMS = [
   { value: 'hoje', label: 'Hoje', icon: Home },
+  { value: 'biblia', label: 'Bíblia', icon: Book },
   { value: 'jornada', label: 'Jornada', icon: Map },
   { value: 'registros', label: 'Registros', icon: BookMarked },
 ]
